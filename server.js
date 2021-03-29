@@ -64,6 +64,7 @@ app.route(prefix + '/eleves')
   .post(eleve.postEleve);
 
 app.route(prefix + '/professeurs')
+  .post(professeur.postProfesseur)
   .get(professeur.getProfesseurs)
 
 app.route(prefix + '/register')

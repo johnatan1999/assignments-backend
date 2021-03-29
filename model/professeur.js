@@ -1,12 +1,11 @@
 let mongoose = require('mongoose');
+const Matiere = require('./IModel').Matiere;
+const User = require('./IModel').User;
+
 var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 let Schema = mongoose.Schema;
 
-const Matiere = {
-    nom: String,
-    image: String
-}
 
 let ProfesseurSchema = Schema({
     id: Number,
@@ -14,7 +13,7 @@ let ProfesseurSchema = Schema({
     prenom: String,
     image: String,
     matiere: Matiere,
-    iduser: String
+    identifiant: User
 });
 
 ProfesseurSchema.plugin(aggregatePaginate);

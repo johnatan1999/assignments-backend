@@ -106,9 +106,31 @@ function logout(req, res) {
     });
 });*/
 
+function createUser(user_) {
+    var hashedPassword = bcrypt.hashSync(user_.password, 8);
+    let user = new User();
+    user.name = user_.name;
+    user.email = user_.email;
+    user.role = user_.role;
+    user.password = hashedPassword;
+
+
+    console.log("POST user reçu :");
+    console.log(user);
+
+    // if user is registered without errors
+    // create a token
+    var token = jwt.sign({ id: user._id }, config.secret, {
+        expiresIn: 86400 // expires in 24 hours
+    });
+    user.token = token;
+    user.save();
+    return user;
+}
 
 module.exports = {
     doRegister,
     doLogin,
-    logout
+    logout,
+    createUser
 };

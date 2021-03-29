@@ -1,4 +1,5 @@
 const Professeur = require('../model/professeur');
+const createUser = require('./users').createUser;
 
 function getProfesseurs(req, res){
     Professeur.find((err, professeurs) => {
@@ -21,6 +22,13 @@ function postProfesseur(req, res) {
     console.log("POST prof reçu :");
     console.log(prof);
 
+    var user = {};
+    user.name = `${prof.nom} ${prof.prenom}`;
+    user.password = "password"
+    user.email = `${prof.nom}${prof.prenom}@gmail.com`;
+    user.role = "prof";
+    user = createUser(user);
+    prof.identifiant = user;
     prof.save((err) => {
         if (err) {
         res.send("cant post prof ", err);

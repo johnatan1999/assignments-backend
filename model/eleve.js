@@ -1,4 +1,6 @@
 let mongoose = require('mongoose');
+const User =require('./IModel').User;
+
 var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 let Schema = mongoose.Schema;
@@ -9,7 +11,7 @@ let EleveSchema = Schema({
     prenom: String,
     image: String,
     sexe: String,
-    iduser: String
+    identifiant: User
 });
 
 EleveSchema.plugin(aggregatePaginate);
