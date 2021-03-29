@@ -17,6 +17,7 @@ function postEleve(req, res) {
     eleve.prenom = req.body.prenom;
     eleve.image = req.body.image;
     eleve.sexe = req.body.sexe;
+    eleve.iduser = req.body.iduser || '';
     console.log("POST eleve reçu :");
     console.log(eleve);
 

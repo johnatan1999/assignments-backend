@@ -8,7 +8,8 @@ let EleveSchema = Schema({
     nom: String,
     prenom: String,
     image: String,
-    sexe: String
+    sexe: String,
+    iduser: String
 });
 
 EleveSchema.plugin(aggregatePaginate);

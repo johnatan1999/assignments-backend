@@ -13,7 +13,8 @@ let ProfesseurSchema = Schema({
     nom: String,
     prenom: String,
     image: String,
-    matiere: Matiere
+    matiere: Matiere,
+    iduser: String
 });
 
 ProfesseurSchema.plugin(aggregatePaginate);
