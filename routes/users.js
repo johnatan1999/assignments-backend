@@ -12,6 +12,7 @@ function doRegister(req, res) {
     let user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
+    user.role = req.body.role;
     user.password = hashedPassword;
 
 
@@ -28,7 +29,7 @@ function doRegister(req, res) {
         if (err) {
             res.send("cant post user ", err);
         }
-        res.json({ message: `${user.name} saved!`, auth: true, token: token });
+        res.json({ message: `${user.name} saved!`, auth: true, user:user});
     });
 }
 
@@ -49,7 +50,7 @@ function doLogin(req, res) {
         });
 
         // return the information including token as JSON
-        res.status(200).send({ auth: true, token: token });
+        res.status(200).send({ auth: true, user:user });
         //res.json(assignment);
     });
 }

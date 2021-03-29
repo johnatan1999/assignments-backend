@@ -3,7 +3,8 @@ var UserSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
-  token: String
+  token: String,
+  role: String,
 });
 mongoose.model('User', UserSchema);
 
