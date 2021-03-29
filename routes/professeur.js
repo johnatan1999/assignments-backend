@@ -10,6 +10,26 @@ function getProfesseurs(req, res){
     });
 }
 
+// Ajout d'un assignment (POST)
+function postProfesseur(req, res) {
+    let prof = new Professeur();
+    prof.nom = req.body.nom;
+    prof.prenom = req.body.prenom;
+    prof.image = req.body.image;
+    prof.matiere = req.body.matiere;
+    prof.iduser = req.body.iduser || '';
+    console.log("POST prof reçu :");
+    console.log(prof);
+
+    prof.save((err) => {
+        if (err) {
+        res.send("cant post prof ", err);
+        }
+        res.json({ message: `${prof.nom} ${prof.prenom} saved!` });
+    });
+}
+
 module.exports = {
-    getProfesseurs
+    getProfesseurs,
+    postProfesseur
 }
