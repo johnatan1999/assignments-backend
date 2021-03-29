@@ -1,5 +1,6 @@
 const Professeur = require('../model/professeur');
 const createUser = require('./users').createUser;
+const Role = require('../model/role');
 
 function getProfesseurs(req, res){
     Professeur.find((err, professeurs) => {
@@ -26,7 +27,7 @@ function postProfesseur(req, res) {
     user.name = `${prof.nom} ${prof.prenom}`;
     user.password = "password"
     user.email = `${prof.nom}${prof.prenom}@gmail.com`;
-    user.role = "prof";
+    user.role = Role.PROFESSEUR;
     user = createUser(user);
     prof.identifiant = user;
     prof.save((err) => {

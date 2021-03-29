@@ -1,4 +1,5 @@
 const Eleve = require("../model/Eleve");
+const Role = require('../model/role');
 const createUser = require("./users").createUser;
 
 function getEleves(req, res){
@@ -23,7 +24,7 @@ function postEleve(req, res) {
     user.name = `${eleve.nom} ${eleve.prenom}`;
     user.password = "password"
     user.email = `${eleve.nom}${eleve.prenom}@gmail.com`;
-    user.role = "eleve";
+    user.role = Role.ADMIN;
     user = createUser(user);
     eleve.identifiant = user;
     console.log("POST eleve reçu :");
