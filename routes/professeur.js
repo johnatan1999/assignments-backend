@@ -2,7 +2,7 @@ const Professeur = require('../model/professeur');
 const createUser = require('./users').createUser;
 const Role = require('../model/role');
 
-function getProfesseurs(req, res){
+/*function getProfesseurs(req, res){
     Professeur.find((err, professeurs) => {
         if(err){
             res.send(err)
@@ -10,7 +10,25 @@ function getProfesseurs(req, res){
 
         res.send(professeurs);
     });
-}
+}*/
+
+function getProfesseurs(req, res) {
+    var aggregateQuery = Professeur.aggregate();
+    
+    Professeur.aggregatePaginate(
+      aggregateQuery,
+      {
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 2,
+      },
+      (err, professeur) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(professeur);
+      }
+    );
+  }
 
 // Ajout d'un assignment (POST)
 function postProfesseur(req, res) {

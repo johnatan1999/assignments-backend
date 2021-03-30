@@ -2,7 +2,27 @@ const Eleve = require("../model/Eleve");
 const Role = require('../model/role');
 const createUser = require("./users").createUser;
 
-function getEleves(req, res){
+// Récupérer tous les eleves (GET), AVEC PAGINATION
+function getEleves(req, res) {
+    var aggregateQuery = Eleve.aggregate();
+    
+    Eleve.aggregatePaginate(
+      aggregateQuery,
+      {
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 10,
+      },
+      (err, eleves) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(eleves);
+      }
+    );
+  }
+
+
+/*function getEleves(req, res){
     Eleve.find((err, eleves) => {
         if(err){
             res.send(err)
@@ -10,7 +30,7 @@ function getEleves(req, res){
 
         res.send(eleves);
     });
-}
+}*/
 
 // Ajout d'un assignment (POST)
 function postEleve(req, res) {
