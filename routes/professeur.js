@@ -44,7 +44,7 @@ function postProfesseur(req, res) {
     var user = {};
     user.name = `${prof.nom} ${prof.prenom}`;
     user.password = "password"
-    user.email = `${prof.nom}${prof.prenom}@gmail.com`;
+    user.email = `${prof.nom}${prof.prenom}@gmail.com`.toLowerCase();
     user.role = Role.PROFESSEUR;
     user = createUser(user);
     prof.identifiant = user;

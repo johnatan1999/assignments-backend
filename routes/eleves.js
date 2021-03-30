@@ -43,8 +43,8 @@ function postEleve(req, res) {
     var user = {};
     user.name = `${eleve.nom} ${eleve.prenom}`;
     user.password = "password"
-    user.email = `${eleve.nom}${eleve.prenom}@gmail.com`;
-    user.role = Role.ADMIN;
+    user.email = `${eleve.nom}${eleve.prenom}@gmail.com`.toLowerCase();
+    user.role = Role.ELEVE;
     user = createUser(user);
     eleve.identifiant = user;
     console.log("POST eleve reçu :");
