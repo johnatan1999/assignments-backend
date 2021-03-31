@@ -55,7 +55,7 @@ function postAssignment(req, res) {
   assignment.dateDeRendu = req.body.dateDeRendu;
   assignment.rendu = req.body.rendu;
   assignment.eleve = {
-    id: req.body.eleve.id,
+    id: req.body.eleve.id || '',
     nom: req.body.eleve.nom,
     prenom: req.body.eleve.prenom,
     image: req.body.eleve.image,

@@ -35,6 +35,7 @@ function getEleves(req, res) {
 // Ajout d'un assignment (POST)
 function postEleve(req, res) {
     let eleve = new Eleve();
+    eleve.id = req.body.id;
     eleve.nom = req.body.nom;
     eleve.prenom = req.body.prenom;
     eleve.image = req.body.image || '';
