@@ -4,6 +4,7 @@ let bodyParser = require('body-parser');
 
 let professeur = require('./routes/professeur');
 let assignment = require('./routes/assignments');
+let matiere = require('./routes/matiere');
 let eleve = require('./routes/eleves');
 let user = require('./routes/users');
 
@@ -66,6 +67,10 @@ app.route(prefix + '/eleves')
 app.route(prefix + '/professeurs')
   .post(professeur.postProfesseur)
   .get(professeur.getProfesseurs)
+
+  app.route(prefix + '/matieres')
+  .post(matiere.postMatiere)
+  .get(matiere.getMatieres)
 
 app.route(prefix + '/register')
   .post(user.doRegister)
