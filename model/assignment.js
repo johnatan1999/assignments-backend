@@ -1,20 +1,11 @@
 let mongoose = require('mongoose');
+const Matiere = require('./IModel').Matiere;
+const Eleve = require('./IModel').Eleve;
+const Professeur = require('./IModel').Professeur;
+
 var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 let Schema = mongoose.Schema;
-
-const Eleve = {
-    id: Number,
-    nom: String,
-    prenom: String,
-    image: String,
-    sexe: String
-}
-
-const Matiere = {
-    nom: String,
-    image: String
-}
 
 let AssignmentSchema = Schema({
     id: Number,
@@ -22,6 +13,7 @@ let AssignmentSchema = Schema({
     description: String,
     note: Number,
     eleve: Eleve,
+    professeur: Professeur,
     dateDeRendu: Date,
     matiere: Matiere,
     rendu: Boolean
