@@ -14,12 +14,11 @@ const Role = require('../model/role');
 
 function getProfesseurs(req, res) {
     var aggregateQuery = Professeur.aggregate();
-    
     Professeur.aggregatePaginate(
       aggregateQuery,
       {
         page: parseInt(req.query.page) || 1,
-        limit: parseInt(req.query.limit) || 2,
+        limit: parseInt(req.query.limit) || 20,
       },
       (err, professeur) => {
         if (err) {

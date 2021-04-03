@@ -1,4 +1,5 @@
 // Assignment est le "modèle mongoose", il est connecté à la base de données
+const { where } = require("../model/assignment");
 let Assignment = require("../model/assignment");
 
 /* Version sans pagination */
@@ -15,23 +16,40 @@ function getAssignments(req, res){
 }
 */
 
+
+function getAssignmentByState(req, res) {
+  const page = parseInt(req.query.page) || 0;
+  const limit = parseInt(req.query.limit) || 10;
+  Assignment.find({'rendu': req.query.state === 'rendu'})
+  .limit(limit)
+  .skip(limit * page)
+  .exec((err, assignments) => {
+    if(err) res.send(err);
+    res.send(assignments);
+  })
+}
+
 // Récupérer tous les assignments (GET), AVEC PAGINATION
 function getAssignments(req, res) {
   var aggregateQuery = Assignment.aggregate();
-  
-  Assignment.aggregatePaginate(
-    aggregateQuery,
-    {
-      page: parseInt(req.query.page) || 1,
-      limit: parseInt(req.query.limit) || 10,
-    },
-    (err, assignments) => {
-      if (err) {
-        res.send(err);
+  if(!req.query.state) {
+    Assignment.aggregatePaginate(
+      aggregateQuery,
+      {
+        page: parseInt(req.query.page) || 0,
+        limit: parseInt(req.query.limit) || 10,
+      },
+      (err, assignments) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(assignments);
       }
-      res.send(assignments);
-    }
-  );
+    );
+  }
+  else {
+    getAssignmentByState(req, res);
+  }
 }
 
 // Récupérer un assignment par son id (GET)
@@ -101,6 +119,7 @@ function deleteAssignment(req, res) {
 
 module.exports = {
   getAssignments,
+  getAssignmentByState,
   postAssignment,
   getAssignment,
   updateAssignment,

@@ -7,6 +7,7 @@ let assignment = require('./routes/assignments');
 let matiere = require('./routes/matiere');
 let eleve = require('./routes/eleves');
 let user = require('./routes/users');
+let _ = require('./routes/_');
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -81,6 +82,8 @@ app.route(prefix + '/login')
 app.route(prefix + '/logout')
   .get(user.logout)
 
+app.route(prefix + '/remove-collection')
+  .delete(_.removeCollection);
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");
