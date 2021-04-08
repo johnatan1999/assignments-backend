@@ -7,6 +7,8 @@ let assignment = require('./routes/assignments');
 let matiere = require('./routes/matiere');
 let eleve = require('./routes/eleves');
 let user = require('./routes/users');
+
+let dashboard = require('./routes/dashboard');
 let _ = require('./routes/_');
 
 let mongoose = require('mongoose');
@@ -84,6 +86,12 @@ app.route(prefix + '/logout')
 
 app.route(prefix + '/remove-collection')
   .delete(_.removeCollection);
+
+app.route(prefix + '/dashboard')
+  .get(dashboard.getDashboard);
+
+app.route(prefix + '/dashboard-assignments')
+.get(dashboard.getAssignmentDashboard);
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");

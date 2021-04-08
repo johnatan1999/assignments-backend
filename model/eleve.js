@@ -1,5 +1,5 @@
 let mongoose = require('mongoose');
-const User =require('./IModel').User;
+const User = require('./IModel').User;
 
 var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
