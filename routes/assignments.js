@@ -20,7 +20,7 @@ function getAssignments(req, res){
 function getAssignmentByState(req, res) {
   const page = parseInt(req.query.page) || 0;
   const limit = parseInt(req.query.limit) || 10;
-  Assignment.find({'rendu': req.query.state === 'rendu'})
+  Assignment.find({'rendu': req.query.state === 'rendu', nom: { $regex: req.query.criteria }})
   .limit(limit)
   .skip(limit * page)
   .exec((err, assignments) => {
@@ -31,8 +31,23 @@ function getAssignmentByState(req, res) {
 
 // Récupérer tous les assignments (GET), AVEC PAGINATION
 function getAssignments(req, res) {
-  var aggregateQuery = Assignment.aggregate();
-  if(!req.query.state) {
+  // nom: String,
+  //   description: String,
+  //   note: Number,
+  //   eleve: Eleve,
+  //   professeur: Professeur,
+  //   dateDeRendu: Date,
+  //   matiere: Matiere,
+  var aggregations = [];
+  var match = {};
+  if(req.query.criteria) {
+    match.nom = {"$regex": req.query.criteria.toLowerCase(), "$options": "i"}
+  } if(req.query.state) {
+    match.rendu = req.query.state === "rendu";
+  }
+  aggregations = [{ $match: match }];
+  var aggregateQuery = Assignment.aggregate(aggregations).sort('-dateUpdate');
+  // if(!req.query.state) {
     Assignment.aggregatePaginate(
       aggregateQuery,
       {
@@ -46,10 +61,10 @@ function getAssignments(req, res) {
         res.send(assignments);
       }
     );
-  }
-  else {
-    getAssignmentByState(req, res);
-  }
+  // }
+  // else {
+  //   getAssignmentByState(req, res);
+  // }
 }
 
 // Récupérer un assignment par son id (GET)
@@ -74,9 +89,10 @@ function postAssignment(req, res) {
   assignment.rendu = req.body.rendu;
   assignment.professeur = req.body.professeur;
   assignment.eleve = req.body.eleve;
+  assignment.dateUpdate = new Date();
   
-  console.log("POST assignment reçu :");
-  console.log(assignment);
+  // console.log("POST assignment reçu :");
+  // console.log(assignment);
 
   assignment.save((err) => {
     if (err) {
@@ -88,8 +104,7 @@ function postAssignment(req, res) {
 
 // Update d'un assignment (PUT)
 function updateAssignment(req, res) {
-  console.log("UPDATE recu assignment : ");
-  console.log(req.body);
+  req.body.dateUpdate = new Date();
   Assignment.findByIdAndUpdate(
     req.body._id,
     req.body,
@@ -99,6 +114,7 @@ function updateAssignment(req, res) {
         console.log(err);
         res.send(err);
       } else {
+        console.log(req.body._id, "updated");
         res.json({ message: "updated" });
       }
 
