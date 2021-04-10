@@ -1,7 +1,7 @@
 let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
-
+const cors = require('cors');
 let professeur = require('./routes/professeur');
 let assignment = require('./routes/assignments');
 let matiere = require('./routes/matiere');
@@ -36,6 +36,8 @@ mongoose.connect(uri, options)
     });
 
 // Pour accepter les connexions cross-domain (CORS)
+app.use(cors());
+app.options('*', cors())
 app.use((req, res, next) =>  {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -53,27 +55,27 @@ let port = process.env.PORT || 8010;
 const prefix = '/api';
 
 app.route(prefix + '/assignments')
-  .get(assignment.getAssignments)
-  .post(assignment.postAssignment)
-  .put(assignment.updateAssignment);
+  .get(user.verifyToken, assignment.getAssignments)
+  .post(user.verifyToken, assignment.postAssignment)
+  .put(user.verifyToken, assignment.updateAssignment);
 
 
 app.route(prefix + '/assignments/:id')
-  .get(assignment.getAssignment)
-  .delete(assignment.deleteAssignment);
+  .get(user.verifyToken, assignment.getAssignment)
+  .delete(user.verifyToken, assignment.deleteAssignment);
 
 // Eleve
 app.route(prefix + '/eleves')
-  .get(eleve.getEleves)
-  .post(eleve.postEleve);
+  .get(user.verifyToken, eleve.getEleves)
+  .post(user.verifyToken, eleve.postEleve);
 
 app.route(prefix + '/professeurs')
-  .post(professeur.postProfesseur)
-  .get(professeur.getProfesseurs)
+  .post(user.verifyToken, professeur.postProfesseur)
+  .get(user.verifyToken, professeur.getProfesseurs)
 
   app.route(prefix + '/matieres')
-  .post(matiere.postMatiere)
-  .get(matiere.getMatieres)
+  .post(user.verifyToken, matiere.postMatiere)
+  .get(user.verifyToken, matiere.getMatieres)
 
 app.route(prefix + '/register')
   .post(user.doRegister)
@@ -85,13 +87,14 @@ app.route(prefix + '/logout')
   .get(user.logout)
 
 app.route(prefix + '/remove-collection')
-  .delete(_.removeCollection);
+  .delete(user.verifyToken, _.removeCollection);
 
 app.route(prefix + '/dashboard')
-  .get(dashboard.getDashboard);
+  .get(user.verifyToken, dashboard.getDashboard);
 
 app.route(prefix + '/dashboard-assignments')
-.get(dashboard.getAssignmentDashboard);
+.get(user.verifyToken, dashboard.getAssignmentDashboard);
+
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");

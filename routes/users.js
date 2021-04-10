@@ -48,9 +48,14 @@ function doLogin(req, res) {
         var token = jwt.sign({ id: user._id }, config.secret, {
             expiresIn: 86400 // expires in 24 hours
         });
-
+        user.token = token;
+        // console.log("###", jwt.verify(token, config.secret));
+        if(jwt.verify(user.token, config.secret)) {
+            res.status(200).send({ auth: true, user:user });
+        } else {
+            res.status(401).send({error: 'Access denied'});
+        }
         // return the information including token as JSON
-        res.status(200).send({ auth: true, user:user });
         //res.json(assignment);
     });
 }
@@ -106,6 +111,20 @@ function logout(req, res) {
     });
 });*/
 
+function verifyToken(req, res, next) {
+    const bearerHeader = req.headers['authorization'];
+    if(bearerHeader) {
+        const bearerToken = bearerHeader.split(' ')[1];
+        req.token = bearerToken;
+        if(jwt.verify(token, config.secret)) 
+            next();
+        else
+            res.status(401).send({error: 'Access denied'})
+    } else {
+        res.status(401).send({error: 'Access denied'})
+    }
+}
+
 function createUser(user_) {
     var hashedPassword = bcrypt.hashSync(user_.password, 8);
     let user = new User();
@@ -132,5 +151,6 @@ module.exports = {
     doRegister,
     doLogin,
     logout,
-    createUser
+    createUser,
+    verifyToken
 };
