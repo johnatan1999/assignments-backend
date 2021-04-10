@@ -116,7 +116,7 @@ function verifyToken(req, res, next) {
     if(bearerHeader) {
         const bearerToken = bearerHeader.split(' ')[1];
         req.token = bearerToken;
-        if(jwt.verify(token, config.secret)) 
+        if(jwt.verify(bearerToken, config.secret)) 
             next();
         else
             res.status(401).send({error: 'Access denied'})
