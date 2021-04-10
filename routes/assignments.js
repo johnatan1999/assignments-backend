@@ -86,11 +86,12 @@ function postAssignment(req, res) {
   assignment.nom = req.body.nom;
   assignment.description = req.body.description;
   assignment.dateDeRendu = req.body.dateDeRendu;
-  assignment.rendu = req.body.rendu;
+  assignment.rendu = req.body.note > 0 ? true : req.body.rendu;
   assignment.professeur = req.body.professeur;
   assignment.eleve = req.body.eleve;
+  assignment.note = req.body.note;
   assignment.dateUpdate = new Date();
-  
+  assignment.enCours = false;
   // console.log("POST assignment reçu :");
   // console.log(assignment);
 
