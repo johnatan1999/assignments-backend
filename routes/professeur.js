@@ -18,7 +18,7 @@ function getProfesseurs(req, res) {
       aggregateQuery,
       {
         page: parseInt(req.query.page) || 1,
-        limit: parseInt(req.query.limit) || 20,
+        limit: parseInt(req.query.limit) || 4,
       },
       (err, professeur) => {
         if (err) {

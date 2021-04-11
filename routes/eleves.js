@@ -32,7 +32,7 @@ function getEleves(req, res) {
     });
 }*/
 
-// Ajout d'un assignment (POST)
+// Ajout d'un eleve (POST)
 function postEleve(req, res) {
     let eleve = new Eleve();
     eleve.id = req.body.id;

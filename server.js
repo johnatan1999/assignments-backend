@@ -77,6 +77,9 @@ app.route(prefix + '/professeurs')
   .post(user.verifyToken, matiere.postMatiere)
   .get(user.verifyToken, matiere.getMatieres)
 
+  app.route(prefix + '/matieres-pagination')
+  .get(user.verifyToken, matiere.getMatieresPagination)
+
 app.route(prefix + '/register')
   .post(user.doRegister)
 
