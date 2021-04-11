@@ -6,6 +6,7 @@ var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 var User = require('../model/user');
 const Professeur = require('../model/professeur');
+const Eleve = require('../model/Eleve');
 
 // register (POST)
 function doRegister(req, res) {
@@ -128,6 +129,11 @@ function verifyToken(req, res, next) {
                 if(user && user.role === Role.Prof) {
                     Professeur.findOne({'identifiant._id': userId}, (err, prof) => {
                         req.profid = prof._id;
+                        next();
+                    })
+                } else if(user && user.role === Role.Eleve) {
+                    Eleve.findOne({'identifiant._id': userId}, (err, eleve) => {
+                        req.eleveid = eleve._id;
                         next();
                     })
                 } else {

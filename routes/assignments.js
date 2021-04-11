@@ -43,7 +43,9 @@ function UpdateMatchQueryByRole(req, match={}) {
   if(req.user) {
     if(req.user.role === Role.Prof) {
       match['professeur._id'] = req.profid;
-    }
+    }else if(req.user.role === Role.Eleve) {
+      match['eleve._id'] = req.eleveid;
+    } 
   }
   return match;
 }
