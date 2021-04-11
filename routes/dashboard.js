@@ -78,9 +78,26 @@ function getSuccessRateByMatter(req, res){
     });
 }
 
+function getSuccessRateByProf(req, res) {
+    Assignment.aggregate([
+        { $match: { rendu: true} },
+        { "$sort": { "professeur._id": -1 } },
+        {
+            $group: {
+                _id: { id: '$professeur._id', nom: '$professeur.nom' },
+                successRate: { $avg: "$note" }
+            }
+        },
+    ]).exec((err, data) => {
+        if(err)
+            res.send(err)
+        res.json(data)
+    });
+}
 
 module.exports = {
     getDashboard,
     getAssignmentDashboard,
-    getSuccessRateByMatter
+    getSuccessRateByMatter,
+    getSuccessRateByProf
 };

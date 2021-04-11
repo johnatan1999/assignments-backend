@@ -97,10 +97,9 @@ app.route(prefix + '/dashboard-assignments')
 
 app.route(prefix + '/success-rate-by-students')
   .get(dashboard.getSuccessRateByMatter);
-
-/*app.route(prefix + '/success-rate-by-students')
-  .get(dashboard.getSuccessRateByStudent);*/
-
+  
+app.route(prefix + '/dashboard-sucess-by-prof')
+  .get(dashboard.getSuccessRateByProf);
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");
