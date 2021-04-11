@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 var User = require('../model/user');
+const Professeur = require('../model/professeur');
 
 // register (POST)
 function doRegister(req, res) {
@@ -50,6 +51,7 @@ function doLogin(req, res) {
         });
         user.token = token;
         // console.log("###", jwt.verify(token, config.secret));
+        user.password = undefined;
         if(jwt.verify(user.token, config.secret)) {
             res.status(200).send({ auth: true, user:user });
         } else {
@@ -116,8 +118,24 @@ function verifyToken(req, res, next) {
     if(bearerHeader) {
         const bearerToken = bearerHeader.split(' ')[1];
         req.token = bearerToken;
-        if(jwt.verify(bearerToken, config.secret)) 
-            next();
+        if(jwt.verify(bearerToken, config.secret))  {
+            const userId = req.headers['userid'];
+            User.findOne({'_id': userId}, (err, user) => {
+                if(err) {
+                    res.status(401).send({error: 'Access denied'})
+                }
+                req.user = user;      
+                if(user && user.role === Role.Prof) {
+                    Professeur.findOne({'identifiant._id': userId}, (err, prof) => {
+                        req.profid = prof._id;
+                        next();
+                    })
+                } else {
+                    next();
+                }
+            });
+            // console.log("role", user)
+        }
         else
             res.status(401).send({error: 'Access denied'})
     } else {
@@ -147,10 +165,17 @@ function createUser(user_) {
     return user;
 }
 
+const Role = {
+    Admin: "admin",
+    Prof: "professeur",
+    Eleve: "eleve"
+}
+
 module.exports = {
     doRegister,
     doLogin,
     logout,
     createUser,
-    verifyToken
+    verifyToken,
+    Role
 };

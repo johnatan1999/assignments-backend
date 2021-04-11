@@ -1,6 +1,7 @@
 // Assignment est le "modèle mongoose", il est connecté à la base de données
 const { where } = require("../model/assignment");
 let Assignment = require("../model/assignment");
+const { Role } = require("./users");
 
 /* Version sans pagination */
 // Récupérer tous les assignments (GET)
@@ -29,15 +30,26 @@ function getAssignmentByState(req, res) {
   })
 }
 
+function getQueryFilterByRole(req) {
+  if(req.user) {
+    if(req.user.role === Role.Prof) {
+      return { 'professeur._id': req.profid }
+    }
+  }
+  return {};
+}
+
+function UpdateMatchQueryByRole(req, match={}) {
+  if(req.user) {
+    if(req.user.role === Role.Prof) {
+      match['professeur._id'] = req.profid;
+    }
+  }
+  return match;
+}
+
 // Récupérer tous les assignments (GET), AVEC PAGINATION
 function getAssignments(req, res) {
-  // nom: String,
-  //   description: String,
-  //   note: Number,
-  //   eleve: Eleve,
-  //   professeur: Professeur,
-  //   dateDeRendu: Date,
-  //   matiere: Matiere,
   var aggregations = [];
   var match = {};
   if(req.query.criteria) {
@@ -45,6 +57,7 @@ function getAssignments(req, res) {
   } if(req.query.state) {
     match.rendu = req.query.state === "rendu";
   }
+  match = UpdateMatchQueryByRole(req, match)
   aggregations = [{ $match: match }];
   var aggregateQuery = Assignment.aggregate(aggregations).sort('-dateUpdate');
   // if(!req.query.state) {
@@ -61,17 +74,13 @@ function getAssignments(req, res) {
         res.send(assignments);
       }
     );
-  // }
-  // else {
-  //   getAssignmentByState(req, res);
-  // }
 }
 
 // Récupérer un assignment par son id (GET)
 function getAssignment(req, res) {
   let assignmentId = req.params.id;
-
-  Assignment.findOne({ id: assignmentId }, (err, assignment) => {
+  filter = { id: assignmentId }
+  Assignment.findOne(filter, (err, assignment) => {
     if (err) {
       res.send(err);
     }
