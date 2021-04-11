@@ -42,11 +42,17 @@ function getAssignmentDashboard(req, res){
                 if (err) {
                     res.send(err);
                 }
-                res.json({
-                    status: 200,
-                    assignment: assignment,
-                    assignmentRendu: assignmentRendu,
-                    assignmentPasRendu: assignmentPasRendu
+                Assignment.where({ 'enCours': true }).countDocuments((err, assignmentEnCours) => {
+                    if (err) {
+                        res.send(err);
+                    }
+                    res.json({
+                        status: 200,
+                        assignment: assignment,
+                        assignmentRendu: assignmentRendu,
+                        assignmentPasRendu: assignmentPasRendu,
+                        assignmentEnCours: assignmentEnCours
+                    });
                 });
             });
         });
