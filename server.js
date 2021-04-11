@@ -95,6 +95,12 @@ app.route(prefix + '/dashboard')
 app.route(prefix + '/dashboard-assignments')
 .get(user.verifyToken, dashboard.getAssignmentDashboard);
 
+app.route(prefix + '/success-rate-by-students')
+  .get(dashboard.getSuccessRateByMatter);
+
+/*app.route(prefix + '/success-rate-by-students')
+  .get(dashboard.getSuccessRateByStudent);*/
+
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");

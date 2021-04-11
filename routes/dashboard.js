@@ -59,8 +59,28 @@ function getAssignmentDashboard(req, res){
     });
 }
 
+function getSuccessRateByMatter(req, res){
+    Assignment.aggregate(
+        [
+          { $match: { rendu: true }},
+          {
+            $group:
+              {
+                _id: {id:"$professeur.matiere._id",nom:"$professeur.matiere.nom"},
+                avgNote: { $avg: "$note" }
+              }
+          }
+        ]
+     )
+    .exec((err, assignments) => {
+        if(err) res.send(err);
+        res.send(assignments);
+    });
+}
+
 
 module.exports = {
     getDashboard,
     getAssignmentDashboard,
+    getSuccessRateByMatter
 };
