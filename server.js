@@ -61,8 +61,11 @@ app.route(prefix + '/assignments')
 
 
 app.route(prefix + '/assignments/:id')
-  .get(user.verifyToken, assignment.getAssignment)
-  .delete(user.verifyToken, assignment.deleteAssignment);
+.get(user.verifyToken, assignment.getAssignment)
+.delete(user.verifyToken, assignment.deleteAssignment);
+
+app.route(prefix + '/assignments/eleve/:id')
+.get(assignment.getStudentAssignmentsGroupedByProfessor)
 
 // Eleve
 app.route(prefix + '/eleves')

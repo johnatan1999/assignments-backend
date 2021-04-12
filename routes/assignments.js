@@ -1,7 +1,9 @@
 // Assignment est le "modèle mongoose", il est connecté à la base de données
 const { where } = require("../model/assignment");
 let Assignment = require("../model/assignment");
+const { Professeur } = require("../model/IModel");
 const { Role } = require("./users");
+const ProfesseurModel = require("../model/professeur");
 
 /* Version sans pagination */
 // Récupérer tous les assignments (GET)
@@ -30,6 +32,35 @@ function getAssignmentByState(req, res) {
   })
 }
 
+function getStudentAssignmentsByProfessor(req, res) {
+  Assignment.find({ 'eleve.id': req.params.eleve_id, 'professeur._id': req.params.prof_id }, (err, assignments) => {
+    if(err) res.send(err);
+    res.send(assignments);
+  });
+}
+
+function getStudentAssignmentsGroupedByProfessor(req, res) {
+  ProfesseurModel.find({}, (err, professeurs) => {
+    if(err) res.send(err);
+    const response = { id: req.params.id, data: [] }
+    const promises = []
+    for(professeur of professeurs) {
+      promises.push(
+        Assignment.find({ 'eleve._id': req.params.id, 'professeur._id': professeur._id }).select(['-professeur', '-eleve'])
+      );
+    }
+    Promise.all(promises).then((data) => {
+      for(i in data) {
+        response.data.push({
+          professeur: professeurs[i],
+          assignments: data[i]
+        })
+      }
+      res.send(response);
+    });
+  })
+} 
+
 function getQueryFilterByRole(req) {
   if(req.user) {
     if(req.user.role === Role.Prof) {
@@ -49,6 +80,8 @@ function UpdateMatchQueryByRole(req, match={}) {
   }
   return match;
 }
+
+
 
 // Récupérer tous les assignments (GET), AVEC PAGINATION
 function getAssignments(req, res) {
@@ -152,4 +185,6 @@ module.exports = {
   getAssignment,
   updateAssignment,
   deleteAssignment,
+  getStudentAssignmentsByProfessor,
+  getStudentAssignmentsGroupedByProfessor
 };

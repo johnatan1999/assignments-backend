@@ -35,6 +35,14 @@ function doRegister(req, res) {
     });
 }
 
+
+const Role = {
+    Admin: "admin",
+    Prof: "professeur",
+    Eleve: "eleve"
+}
+
+
 //login (POST)
 function doLogin(req, res) {
     let userEmail = req.body.email;
@@ -51,10 +59,40 @@ function doLogin(req, res) {
             expiresIn: 86400 // expires in 24 hours
         });
         user.token = token;
-        // console.log("###", jwt.verify(token, config.secret));
         user.password = undefined;
+        const response = {
+            token: token,
+            name: user.name,
+            role: user.role,
+            _id: user._id
+        }
         if(jwt.verify(user.token, config.secret)) {
-            res.status(200).send({ auth: true, user:user });
+            // Get user Info
+            if(user.role === Role.Eleve) {
+                Eleve.findOne({'identifiant._id': user._id}).exec((err, eleve) => {
+                    if(err) res.send(err);
+                    response.user_info = {
+                        image:eleve.image, 
+                        _id: eleve._id,
+                        nom: eleve.nom,
+                        prenom: eleve.prenom
+                    }
+                    res.status(200).send({ auth: true, user: response});
+                })
+            } else if(user.role === Role.Prof) {
+                Professeur.findOne({'identifiant._id': user._id}).exec((err, prof) => {
+                    if(err) res.send(err);
+                    response.user_info = {
+                        image:prof.image, 
+                        _id: prof._id,
+                        nom: prof.nom,
+                        prenom: prof.prenom
+                    }
+                    res.status(200).send({ auth: true, user: response});
+                })
+            } else {
+                res.status(401).send({error: 'Access denied'});
+            }
         } else {
             res.status(401).send({error: 'Access denied'});
         }
@@ -67,52 +105,6 @@ function doLogin(req, res) {
 function logout(req, res) {
     res.status(200).send({ auth: true, token: null });
 }
-
-// CREATES A NEW USER
-/*router.post('/', function (req, res) {
-    User.create({
-            name : req.body.name,
-            email : req.body.email,
-            password : req.body.password
-        }, 
-        function (err, user) {
-            if (err) return res.status(500).send("There was a problem adding the information to the database.");
-            res.status(200).send(user);
-        });
-});
-*/
-// RETURNS ALL THE USERS IN THE DATABASE
-/*router.get('/', function (req, res) {
-    User.find({}, function (err, users) {
-        if (err) return res.status(500).send("There was a problem finding the users.");
-        res.status(200).send(users);
-    });
-});*/
-
-// GETS A SINGLE USER FROM THE DATABASE
-/*router.get('/:id', function (req, res) {
-    User.findById(req.params.id, function (err, user) {
-        if (err) return res.status(500).send("There was a problem finding the user.");
-        if (!user) return res.status(404).send("No user found.");
-        res.status(200).send(user);
-    });
-});*/
-
-// DELETES A USER FROM THE DATABASE
-/*router.delete('/:id', function (req, res) {
-    User.findByIdAndRemove(req.params.id, function (err, user) {
-        if (err) return res.status(500).send("There was a problem deleting the user.");
-        res.status(200).send("User: "+ user.name +" was deleted.");
-    });
-});*/
-
-// UPDATES A SINGLE USER IN THE DATABASE
-/*router.put('/:id', function (req, res) {
-    User.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, user) {
-        if (err) return res.status(500).send("There was a problem updating the user.");
-        res.status(200).send(user);
-    });
-});*/
 
 function verifyToken(req, res, next) {
     const bearerHeader = req.headers['authorization'];
@@ -169,12 +161,6 @@ function createUser(user_) {
     user.token = token;
     user.save();
     return user;
-}
-
-const Role = {
-    Admin: "admin",
-    Prof: "professeur",
-    Eleve: "eleve"
 }
 
 module.exports = {
