@@ -90,6 +90,8 @@ function doLogin(req, res) {
                     }
                     res.status(200).send({ auth: true, user: response});
                 })
+            } else if(user.role === Role.Admin) {
+                res.status(200).send({ auth: true, user: response});
             } else {
                 res.status(401).send({error: 'Access denied'});
             }
