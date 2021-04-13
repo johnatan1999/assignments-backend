@@ -3,6 +3,7 @@ const Matiere = require("../model/Matiere");
 const Professeur = require("../model/professeur");
 const Eleve = require("../model/Eleve");
 let Assignment = require("../model/assignment");
+const Etat = require('../routes/assignments').Etat;
 
 function getDashboard(req, res) {
     Matiere.countDocuments((err, matiere) => {
@@ -42,7 +43,7 @@ function getAssignmentDashboard(req, res){
                 if (err) {
                     res.send(err);
                 }
-                Assignment.where({ 'enCours': true }).countDocuments((err, assignmentEnCours) => {
+                Assignment.where({ 'etat': Etat.EN_COURS }).countDocuments((err, assignmentEnCours) => {
                     if (err) {
                         res.send(err);
                     }

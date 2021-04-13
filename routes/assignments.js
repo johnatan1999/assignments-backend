@@ -20,6 +20,12 @@ function getAssignments(req, res){
 */
 
 
+const Etat = {
+  EN_COURS: 1,
+  EN_ATTENTE: 2,
+  NOTEE: 3
+}
+
 function getAssignmentByState(req, res) {
   const page = parseInt(req.query.page) || 0;
   const limit = parseInt(req.query.limit) || 10;
@@ -46,7 +52,8 @@ function getStudentAssignmentsGroupedByProfessor(req, res) {
     const promises = []
     for(professeur of professeurs) {
       promises.push(
-        Assignment.find({ 'eleve._id': req.params.id, 'professeur._id': professeur._id }).select(['-professeur', '-eleve'])
+        // Assignment.find({ 'eleve._id': req.params.id, 'professeur._id': professeur._id }).select(['-professeur', '-eleve'])
+        Assignment.find({ 'eleve._id': req.params.id, 'professeur._id': professeur._id })
       );
     }
     Promise.all(promises).then((data) => {
@@ -90,7 +97,9 @@ function getAssignments(req, res) {
   if(req.query.criteria) {
     match.nom = {"$regex": req.query.criteria.toLowerCase(), "$options": "i"}
   } if(req.query.state) {
-    match.rendu = req.query.state === "rendu";
+    if(req.query.state === ''+Etat.NOTEE) {
+      match.etat = req.query.state;
+    } else match.rendu = req.query.state === "rendu";
   }
   match = UpdateMatchQueryByRole(req, match)
   aggregations = [{ $match: match }];
@@ -135,7 +144,7 @@ function postAssignment(req, res) {
   assignment.eleve = req.body.eleve;
   assignment.note = req.body.note;
   assignment.dateUpdate = new Date();
-  assignment.enCours = false;
+  assignment.etat = 0;
   // console.log("POST assignment reçu :");
   // console.log(assignment);
 
@@ -186,5 +195,6 @@ module.exports = {
   updateAssignment,
   deleteAssignment,
   getStudentAssignmentsByProfessor,
+  Etat, 
   getStudentAssignmentsGroupedByProfessor
 };

@@ -18,7 +18,7 @@ let AssignmentSchema = Schema({
     matiere: Matiere,
     rendu: Boolean,
     dateUpdate: Date,
-    enCours: Boolean
+    etat: Number
 });
 
 AssignmentSchema.plugin(aggregatePaginate);
