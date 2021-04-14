@@ -17,7 +17,7 @@ function getProfesseurs(req, res) {
     Professeur.aggregatePaginate(
       aggregateQuery,
       {
-        page: parseInt(req.query.page) || 1,
+        page: parseInt(req.query.page) || 0,
         limit: parseInt(req.query.limit) || 4,
       },
       (err, professeur) => {

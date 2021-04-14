@@ -9,7 +9,7 @@ function getEleves(req, res) {
     Eleve.aggregatePaginate(
       aggregateQuery,
       {
-        page: parseInt(req.query.page) || 1,
+        page: parseInt(req.query.page) || 0,
         limit: parseInt(req.query.limit) || 10,
       },
       (err, eleves) => {

@@ -7,6 +7,7 @@ let assignment = require('./routes/assignments');
 let matiere = require('./routes/matiere');
 let eleve = require('./routes/eleves');
 let user = require('./routes/users');
+let cours = require('./routes/cours');
 
 let dashboard = require('./routes/dashboard');
 let _ = require('./routes/_');
@@ -106,6 +107,10 @@ app.route(prefix + '/success-rate-by-students')
   
 app.route(prefix + '/dashboard-sucess-by-prof')
   .get(dashboard.getSuccessRateByProf);
+
+app.route(prefix + '/cours')
+  .get(user.verifyToken, cours.getCours)
+  .post(user.verifyToken, cours.postCours);
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");
