@@ -96,28 +96,25 @@ function getAssignments(req, res) {
   var match = {};
   if(req.query.criteria) {
     match.nom = {"$regex": req.query.criteria.toLowerCase(), "$options": "i"}
-  } if(req.query.state) {
+  } 
+  if(req.query.state) {
     if(req.query.state === ''+Etat.NOTEE) {
-      match.etat = req.query.state;
-    } else match.rendu = req.query.state === "rendu";
+      match.etat = parseInt(req.query.state);
+    } else {
+      match.rendu = req.query.state === "rendu";
+      match.etat = {$ne: Etat.NOTEE};
+   }
   }
   match = UpdateMatchQueryByRole(req, match)
   aggregations = [{ $match: match }];
   var aggregateQuery = Assignment.aggregate(aggregations).sort('-dateUpdate');
-  // if(!req.query.state) {
-    Assignment.aggregatePaginate(
-      aggregateQuery,
-      {
-        page: parseInt(req.query.page) || 0,
-        limit: parseInt(req.query.limit) || 10,
-      },
-      (err, assignments) => {
-        if (err) {
-          res.send(err);
-        }
-        res.send(assignments);
-      }
-    );
+  Assignment.aggregatePaginate(
+    aggregateQuery, { page: parseInt(req.query.page) || 0, limit: parseInt(req.query.limit) || 10 },
+    (err, assignments) => {
+      if (err) res.send(err);
+      res.send(assignments);
+    }
+  );
 }
 
 // Récupérer un assignment par son id (GET)
@@ -144,7 +141,7 @@ function postAssignment(req, res) {
   assignment.eleve = req.body.eleve;
   assignment.note = req.body.note;
   assignment.dateUpdate = new Date();
-  assignment.etat = 0;
+  assignment.etat = req.body.etat;
   // console.log("POST assignment reçu :");
   // console.log(assignment);
 

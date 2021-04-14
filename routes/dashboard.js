@@ -63,7 +63,7 @@ function getAssignmentDashboard(req, res){
 function getSuccessRateByMatter(req, res){
     Assignment.aggregate(
         [
-          { $match: { rendu: true }},
+          { $match: { etat: Etat.NOTEE }},
           {
             $group:
               {
@@ -81,7 +81,7 @@ function getSuccessRateByMatter(req, res){
 
 function getSuccessRateByProf(req, res) {
     Assignment.aggregate([
-        { $match: { rendu: true} },
+        { $match: { etat: Etat.NOTEE} },
         { "$sort": { "professeur._id": -1 } },
         {
             $group: {
