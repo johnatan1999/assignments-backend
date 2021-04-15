@@ -42,7 +42,7 @@ app.use(cors({
   credentials: true,
   preflightContinue: true  
 }));
-// app.options('*', cors())   
+app.options('*', cors())   
 // app.use((req, res, next) =>  {
 //   // res.setHeader("Access-Control-Allow-Origin", '*');
 //   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, UserId, Authorization");
