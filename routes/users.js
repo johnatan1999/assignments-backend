@@ -6,7 +6,7 @@ var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 var User = require('../model/user');
 const Professeur = require('../model/professeur');
-const Eleve = require('../model/Eleve');
+const Eleve = require('../model/eleve');
 
 // register (POST)
 function doRegister(req, res) {
