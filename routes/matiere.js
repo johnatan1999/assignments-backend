@@ -1,4 +1,4 @@
-const Matiere = require('../model/Matiere');
+const Matiere = require('../model/matiere');
 
 function getMatieres(req, res){
     Matiere.find((err, Matieres) => {
