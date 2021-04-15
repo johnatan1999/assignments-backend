@@ -44,7 +44,7 @@ mongoose.connect(uri, options)
 //   preflightContinue: true  
 // }));
 // app.options('*', cors())  
- 
+
 // app.use((req, res, next) =>  {
 //   // res.setHeader("Access-Control-Allow-Origin", '*');
 //   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, UserId, Authorization");
@@ -102,10 +102,6 @@ app.route(prefix + '/register')
 
 app.route(prefix + '/login')
   .post(user.doLogin)
-  .options(function (req, res) {   
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.send(200);
-  })
 
 app.route(prefix + '/logout')
   .get(user.logout)
