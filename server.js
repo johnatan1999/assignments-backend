@@ -40,7 +40,7 @@ mongoose.connect(uri, options)
 app.use(cors({
   origin: "*",
   credentials: true,
-  preflightContinue: false  
+  preflightContinue: true  
 }));
 // app.options('*', cors())   
 // app.use((req, res, next) =>  {
