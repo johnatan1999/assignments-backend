@@ -3,6 +3,13 @@ const Role = require('../model/role');
 const createUser = require("./users").createUser;
 
 // Récupérer tous les eleves (GET), AVEC PAGINATION
+function getAllEleves(req, res) {
+  Eleve.find({}, (err, eleves) => {
+    if(err) res.send(err);
+    res.send(eleves);
+  })
+}
+
 function getEleves(req, res) {
     var aggregateQuery = Eleve.aggregate();
     
@@ -60,5 +67,6 @@ function postEleve(req, res) {
 
 module.exports = {
     getEleves,
-    postEleve
+    postEleve,
+    getAllEleves
 }

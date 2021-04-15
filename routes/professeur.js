@@ -2,15 +2,14 @@ const Professeur = require('../model/professeur');
 const createUser = require('./users').createUser;
 const Role = require('../model/role');
 
-/*function getProfesseurs(req, res){
+function getAllProfesseurs(req, res){
     Professeur.find((err, professeurs) => {
         if(err){
             res.send(err)
         }
-
         res.send(professeurs);
     });
-}*/
+}
 
 function getProfesseurs(req, res) {
     var aggregateQuery = Professeur.aggregate();
@@ -57,5 +56,6 @@ function postProfesseur(req, res) {
 
 module.exports = {
     getProfesseurs,
+    getAllProfesseurs,
     postProfesseur
 }

@@ -39,13 +39,13 @@ mongoose.connect(uri, options)
 // Pour accepter les connexions cross-domain (CORS)
 app.use(cors());
 app.options('*', cors())
-// app.use((req, res, next) =>  {
-//   // res.setHeader("Access-Control-Allow-Origin", '*');
-//   // res.header("Access-Control-Allow-Origin", "http://localhost:4200/, https://assignments-frontend.herokuapp.com");
-//   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, UserId, Authorization");
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   next();
-// });
+app.use((req, res, next) =>  {
+  // res.setHeader("Access-Control-Allow-Origin", '*');
+  // res.header("Access-Control-Allow-Origin", "http://localhost:4200/, https://assignments-frontend.herokuapp.com");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, UserId, Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
 
 // Pour les formulaires
 app.use(bodyParser.urlencoded({extended: true}));
@@ -73,6 +73,12 @@ app.route(prefix + '/assignments/eleve/:id')
 app.route(prefix + '/eleves')
   .get(user.verifyToken, eleve.getEleves)
   .post(user.verifyToken, eleve.postEleve);
+
+app.route(prefix + '/all-eleves')
+  .get(user.verifyToken, eleve.getAllEleves);
+
+app.route(prefix + '/all-professeurs')
+  .get(user.verifyToken, professeur.getAllProfesseurs);
 
 app.route(prefix + '/professeurs')
   .post(user.verifyToken, professeur.postProfesseur)
