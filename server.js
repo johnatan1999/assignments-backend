@@ -123,6 +123,9 @@ app.route(prefix + '/cours')
   .get(user.verifyToken, cours.getCours)
   .post(user.verifyToken, cours.postCours);
 
+  app.route(prefix + '/salut')
+  .get(user.salut)
+
 // On démarre le serveur
 app.listen(port, "0.0.0.0");
 console.log('Serveur démarré  sur http://localhost:' + port);

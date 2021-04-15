@@ -165,7 +165,12 @@ function createUser(user_) {
     return user;
 }
 
+function salut(req,res){
+    res.send('slt');
+}
+
 module.exports = {
+    salut,
     doRegister,
     doLogin,
     logout,
