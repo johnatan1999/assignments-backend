@@ -1,7 +1,7 @@
-const Matiere = require("../model/Matiere");
+const Matiere = require("../model/matiere");
 
 const Professeur = require("../model/professeur");
-const Eleve = require("../model/Eleve");
+const Eleve = require("../model/eleve");
 let Assignment = require("../model/assignment");
 const Etat = require('../routes/assignments').Etat;
 

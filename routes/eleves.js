@@ -1,4 +1,4 @@
-const Eleve = require("../model/Eleve");
+const Eleve = require("../model/eleve");
 const Role = require('../model/role');
 const createUser = require("./users").createUser;
 
