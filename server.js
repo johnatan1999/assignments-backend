@@ -38,7 +38,7 @@ mongoose.connect(uri, options)
 
 // Pour accepter les connexions cross-domain (CORS)
 app.use(cors());
-app.options('*', cors())
+app.options('*', cors()) 
 app.use((req, res, next) =>  {
   res.setHeader("Access-Control-Allow-Origin", '*');
   //res.header("Access-Control-Allow-Origin", "http://localhost:4200/, https://assignments-frontend.herokuapp.com");
