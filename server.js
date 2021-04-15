@@ -37,17 +37,19 @@ mongoose.connect(uri, options)
     });
 
 // Pour accepter les connexions cross-domain (CORS)
-app.use(cors());
-app.options('*', cors())   
-// console.log(app.);
-app.use((req, res, next) =>  {
-  // res.setHeader("Access-Control-Allow-Origin", '*');
-  res.header("Access-Control-Allow-Origin", "https://assignments-frontend.herokuapp.com");
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, UserId, Authorization");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
+app.use(cors({
+  origin: "*",
+  credentials: true,
+  preflightContinue: false  
+}));
+// app.options('*', cors())   
+// app.use((req, res, next) =>  {
+//   // res.setHeader("Access-Control-Allow-Origin", '*');
+//   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, UserId, Authorization");
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
 
 // Pour les formulaires
 app.use(bodyParser.urlencoded({extended: true}));
