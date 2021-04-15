@@ -38,7 +38,7 @@ mongoose.connect(uri, options)
 
 // Pour accepter les connexions cross-domain (CORS)
 app.use(cors());
-app.options('*', cors()) 
+app.options('*', cors())   
 app.use((req, res, next) =>  {
   res.setHeader("Access-Control-Allow-Origin", '*');
   //res.header("Access-Control-Allow-Origin", "http://localhost:4200/, https://assignments-frontend.herokuapp.com");
@@ -96,6 +96,12 @@ app.route(prefix + '/register')
 
 app.route(prefix + '/login')
   .post(user.doLogin)
+  .options(function (req, res) {   
+    res.setHeader("Access-Control-Allow-Origin", '*');
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, UserId, Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.send(200);
+  })
 
 app.route(prefix + '/logout')
   .get(user.logout)
