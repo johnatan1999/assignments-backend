@@ -37,7 +37,7 @@ mongoose.connect(uri, options)
     });
 
 // Pour accepter les connexions cross-domain (CORS)
-app.use(cors());
+// app.use(cors());
 // app.options('*', cors())
 app.use((req, res, next) =>  {
   res.header("Access-Control-Allow-Origin", "*");
